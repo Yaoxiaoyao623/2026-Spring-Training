@@ -1,0 +1,424 @@
+十分抱歉，由于我今天（4.20）晚上才搞定梯子的问题，作业无法从头开始学了，只能借助ai完成，请见谅，下次一定认真完善。
+一、工具安装与使用记录
+1. 浏览器开发者工具（F12）
+安装状态：无需安装，浏览器自带
+使用方法：
+•  快捷键 F12 或 Ctrl+Shift+I 打开开发者工具
+•  Ctrl+U 查看网页源代码
+•  Ctrl+F 在源代码中搜索关键词（flag、ctf等）
+•  Network面板查看网络请求，Elements面板查看DOM结构
+截图记录：
+[](此处粘贴截图：显示打开F12后的Elements/Network面板
+----
+2. Hackbar 浏览器插件
+安装环境：Google Chrome / Firefox
+安装步骤：
+1.  打开Chrome网上应用店（或Firefox附加组件）
+2.  搜索 "Hackbar"
+3.  点击"添加至Chrome"完成安装
+4.  安装后按 F12 在开发者工具中可见Hackbar标签页
+核心功能：
+•  直接构造GET/POST请求
+•  修改请求头、Cookie、User-Agent等
+•  URL编码/解码、Base64编解码
+•  SQL注入辅助测试
+截图记录：
+[](此处粘贴截图：显示Chrome扩展程序中的Hackbar
+![Hackbar使用界面截图](此处粘贴截图：显示F12中的Hackbar标签页，包含Load URL、Split URL等按钮)
+----
+3. Burp Suite 代理抓包工具
+版本：Burp Suite Community Edition（免费版）
+安装步骤：
+1.  访问官网 https://portswigger.net/burp/communitydownload 下载安装包
+2.  安装Java运行环境（JRE 11+）
+3.  运行安装程序，按向导完成安装
+4.  配置浏览器代理：127.0.0.1:8080
+5.  访问 http://burpsuite 下载CA证书并安装到浏览器
+核心功能验证：
+•  Proxy模块：拦截HTTP/HTTPS请求
+•  Repeater模块：重放修改后的请求
+•  Intruder模块：自动化爆破测试
+截图记录：
+[](此处粘贴截图：显示Dashboard/Proxy界面
+[](此处粘贴截图：显示浏览器代理设置127.0.0.1:8080
+[](此处粘贴截图：显示证书安装成功提示
+----
+4. dirsearch 目录扫描工具
+安装环境：Python 3.x + pip
+安装步骤：
+# 1. 克隆仓库
+git clone https://github.com/maurosoria/dirsearch.git
+
+# 2. 进入目录
+cd dirsearch
+
+# 3. 安装依赖
+pip3 install -r requirements.txt
+
+# 4. 验证安装
+python3 dirsearch.py --help
+
+基本使用测试：
+# 扫描目标网站常见目录
+python3 dirsearch.py -u http://example.com -e php,html,txt,js
+
+# 常用参数说明：
+# -u: 目标URL
+# -e: 指定扩展名
+# -w: 指定字典文件
+# -t: 线程数
+# -r: 递归扫描
+
+截图记录：
+![dirsearch安装截图](此处粘贴截图：显示git clone和pip install成功)
+[](此处粘贴截图：显示扫描过程及发现的目录
+----
+5. AI辅助学习工具
+使用平台：ChatGPT / Claude / Kimi
+使用场景：
+•  理解PHP代码逻辑
+•  查询网络安全概念（如robots协议、HTTP请求方法）
+•  分析报错信息
+•  辅助编写脚本
+使用示例记录：
+提问：请解释这段PHP代码的含义：
+$moe = $_GET['moe'];
+if ($moe == "flag") { echo $flag; }
+
+AI回答：这段代码通过GET方式接收名为"moe"的参数，如果参数值等于字符串"flag"，则输出变量$flag的内容...
+截图记录：
+[](此处粘贴截图：显示向AI提问及回答的界面
+----
+二、题目Writeup
+----
+题目1：[SWPUCTF 2021 新生赛]gift_F12
+题目类型：Web - 信息收集
+题目描述：打开题目环境后，显示一个倒计时页面，提示等待到2021年10月23日。页面标题提示"F12"。
+解题思路分析：
+1.  题目名称中的"F12"明确提示需要使用浏览器开发者工具
+2.  倒计时页面可能是前端JavaScript实现的，真实flag可能隐藏在源代码中
+3.  不需要真正等待倒计时结束，flag应该直接可在源码中找到
+详细解题步骤：
+步骤1：打开题目环境，观察到倒计时页面
+[](此处粘贴截图：显示题目倒计时页面
+步骤2：按 F12 打开开发者工具，或按 Ctrl+U 直接查看源代码
+[](此处粘贴截图：显示网页源代码界面
+步骤3：使用 Ctrl+F 搜索关键词"flag"
+•  在源代码中搜索发现flag字符串
+[](此处粘贴截图：显示Ctrl+F搜索框及高亮的flag
+步骤4：提取flag内容
+•  在源码中发现：WLLMCTF{We1c0me_t0_WLLMCTF_Th1s_1s_th3_G1ft}
+•  根据平台要求，将外层格式改为NSSCTF格式提交
+最终Flag：
+NSSCTF{We1c0me_t0_WLLMCTF_Th1s_1s_th3_G1ft}
+
+提交成功截图：
+[](此处粘贴截图：显示平台Accepted或得分界面
+知识点总结：
+•  浏览器开发者工具是Web安全最基础的工具
+•  前端实现的限制（如倒计时）通常可以绕过
+•  flag常隐藏在HTML注释、JavaScript代码或CSS中
+----
+题目2：[qsnctf-NO.0902]robots.txt
+题目类型：Web - 信息收集
+前置知识学习：
+通过AI查询了解到：robots.txt是网站根目录下的文本文件，用于告诉网络搜索引擎的爬虫哪些页面可以抓取，哪些不可以。格式为"User-agent"和"Disallow"规则。虽然目的是引导搜索引擎，但攻击者可以通过它发现网站隐藏路径。
+题目描述：题目名称直接提示robots.txt
+解题思路分析：
+1.  题目名称明确指向robots.txt文件
+2.  需要访问 http://target.com/robots.txt 查看内容
+3.  robots.txt中可能包含敏感路径的Disallow规则
+4.  访问这些被禁止的路径可能获取flag
+详细解题步骤：
+步骤1：构造URL访问robots.txt
+http://[题目IP:端口]/robots.txt
+
+步骤2：查看robots.txt内容
+[](此处粘贴截图：显示robots.txt文件内容
+步骤3：分析内容
+假设发现以下内容：
+User-agent: *
+Disallow: /flag.php
+Disallow: /admin/
+
+步骤4：访问禁止的路径获取flag
+http://[题目IP:端口]/flag.php
+
+[](此处粘贴截图：显示访问后得到的flag
+最终Flag：
+[根据实际题目填写，如：qsnctf{rob0ts_t3xt_1s_us3ful}]
+
+提交成功截图：
+[](此处粘贴截图：显示提交成功界面
+知识点总结：
+•  robots.txt属于敏感信息泄露的一种
+•  信息收集是Web安全的第一步
+•  常见敏感文件：robots.txt、.git/、.svn/、.DS_Store、phpinfo.php等
+----
+题目3：[MoeCTF 2021]Web安全入门指北—GET
+题目类型：Web - HTTP协议基础
+前置知识学习：
+通过AI学习GET/POST请求：
+•  GET请求：通过URL传参，参数附在URL后，格式为 ?key1=value1&key2=value2，可见于地址栏，有长度限制
+•  POST请求：通过请求体传参，不可见于URL，适合传输大量数据或敏感信息
+PHP代码分析：
+<?php
+include "flag.php";
+$moe = $_GET['moe'];  // 通过GET方式获取名为moe的参数
+if ($moe == "flag") {  // 判断参数值是否等于字符串"flag"
+    echo $flag;        // 条件成立则输出flag变量
+} else {
+    highlight_file(__FILE__);  // 条件不成立则显示当前文件源码
+}
+?>
+
+代码逻辑理解：
+1.  包含外部文件flag.php（其中定义了$flag变量）
+2.  从GET参数中获取"moe"的值
+3.  如果moe的值等于"flag"这个字符串，就输出flag
+4.  否则显示当前PHP文件的源代码（就是我们现在看到的）
+解题思路分析：
+•  当前页面显示源码，说明没有传入moe参数，或者传入的值不对
+•  需要构造GET请求，传入 moe=flag
+•  可以使用URL直接传参，或使用Hackbar工具
+详细解题步骤：
+步骤1：分析当前页面
+[](此处粘贴截图：显示PHP源码页面
+步骤2：构造GET请求（方法一：直接修改URL）
+http://[题目IP:端口]/?moe=flag
+
+•  在原有URL后添加 ?moe=flag
+[](此处粘贴截图：显示修改URL后的页面及返回的flag
+步骤3：构造GET请求（方法二：使用Hackbar）
+1.  按F12打开Hackbar
+2.  Load URL加载当前页面
+3.  在参数区域添加：moe = flag
+4.  点击Execute执行
+[](此处粘贴截图：显示Hackbar中添加参数并执行的界面
+步骤4：获取flag
+页面返回flag内容：
+[](此处粘贴截图：显示页面输出的flag
+最终Flag：
+[MoeCTF{g3t_1s_s1mpl3_4nd_1nt3r3st1ng} 或根据实际题目填写]
+
+提交成功截图：
+[](此处粘贴截图：显示提交成功
+知识点总结：
+•  GET传参格式：?参数名=参数值&参数2=值2
+•  PHP中 $_GET['xxx'] 获取URL参数
+•  条件判断 == 为松散比较（类型转换后比较），=== 为严格比较
+•  可以通过直接修改URL或使用工具构造请求
+----
+三、Linux环境搭建记录
+搭建方案：[VMware虚拟机 / WSL / 云服务器，三选一或组合]
+方案选择说明：
+我选择使用 VMware + Kali Linux 进行搭建，因为Kali预装了大量安全工具，适合CTF学习。
+----
+环境搭建步骤
+步骤1：下载安装VMware
+•  官网下载VMware Workstation 17 Player（免费版）
+•  运行安装程序，按向导完成
+[](此处粘贴截图：显示VMware安装完成界面
+步骤2：下载Kali Linux镜像
+•  访问 https://www.kali.org/get-kali/
+•  下载Kali Linux VMware 64-bit镜像（预配置版本，开箱即用）
+[](此处粘贴截图：显示Kali下载页面
+步骤3：导入虚拟机
+1.  解压下载的Kali VMware镜像
+2.  打开VMware → "打开虚拟机" → 选择.vmx文件
+3.  配置虚拟机设置（内存建议4GB+，处理器2核+）
+[](此处粘贴截图：显示VMware中Kali虚拟机界面
+步骤4：启动并初始化
+1.  开启虚拟机
+2.  默认账号：kali / 密码：kali
+3.  执行系统更新：
+sudo apt update && sudo apt upgrade -y
+
+[](此处粘贴截图：显示Kali桌面环境
+[](此处粘贴截图：显示终端执行update命令
+步骤5：安装必要工具
+# 安装常用工具
+sudo apt install -y git python3 python3-pip curl wget vim
+
+# 验证安装
+python3 --version
+git --version
+
+[](此处粘贴截图：显示工具安装成功
+----
+[如选择WSL，替换为以下内容]
+WSL安装步骤：
+# 以管理员身份打开PowerShell
+wsl --install
+
+# 安装Kali Linux
+wsl --install -d kali-linux
+
+# 设置用户名密码后进入系统
+wsl -d kali-linux
+
+[](此处粘贴截图：显示PowerShell中wsl安装过程
+![WSL运行截图](此处粘贴截图：显示Windows Terminal中Kali运行界面)
+----
+四、Linux基础命令学习笔记
+1. 文件系统操作命令
+命令	功能说明	常用参数	实践记录
+`ls`	列出目录内容	`-l`详细列表 `-a`显示隐藏文件	`ls -la` 查看所有文件包括隐藏文件
+`cd`	切换工作目录	`..`上级目录 `~`用户主目录	`cd /var/www/html` 进入web目录
+`pwd`	显示当前路径	无	`pwd` 确认当前所在位置
+`cat`	查看文件内容	`-n`显示行号	`cat flag.txt` 读取flag文件
+`touch`	创建空文件	无	`touch test.php` 创建webshell文件
+`mkdir`	创建目录	`-p`递归创建	`mkdir -p web/upload`
+`rm`	删除文件/目录	`-r`递归 `-f`强制	`rm -rf temp/` 删除临时目录
+`cp`	复制文件/目录	`-r`递归复制目录	`cp flag.txt /tmp/backup.txt`
+`mv`	移动或重命名	无	`mv old.txt new.txt`
+实践截图：
+[](此处粘贴截图：显示在终端执行ls/cd/cat等命令
+----
+2. 文件权限与用户管理
+命令	功能说明	示例
+`chmod`	修改文件权限	`chmod 755 script.sh` 所有者读写执行，其他读执行
+`chown`	修改文件所有者	`chown root:root file.txt`
+`sudo`	以超级用户权限执行	`sudo apt install nginx`
+`whoami`	查看当前用户	`whoami` 返回kali
+`id`	查看用户ID和组信息	`id` 显示uid=1000(kali) gid=1000(kali)
+权限数字说明：
+•  4 = 读(r)，2 = 写(w)，1 = 执行(x)
+•  755 = rwxr-xr-x（所有者全权限，组和其他读+执行）
+•  777 = rwxrwxrwx（全开，危险）
+实践截图：
+![权限操作截图](此处粘贴截图：显示chmod/chown操作及ls -l查看权限)
+----
+3. 文本处理与搜索
+命令	功能说明	常用参数	CTF应用场景
+`grep`	文本搜索	`-i`忽略大小写 `-r`递归搜索	`grep -r "flag{" /var/www/` 全局搜索flag
+`find`	查找文件	`-name`按名 `-type`按类型	`find / -name "*.txt"` 找所有txt
+`head`	查看文件前N行	`-n`指定行数	`head -n 5 log.txt`
+`tail`	查看文件后N行	`-f`实时追踪	`tail -f /var/log/apache2/access.log`
+`wc`	统计行数/字数	`-l`行数	`wc -l dict.txt` 统计字典行数
+实践截图：
+[](此处粘贴截图：显示grep/find命令执行结果
+----
+4. 网络相关命令
+命令	功能说明	示例
+`ifconfig` / `ip addr`	查看网络接口配置	`ip addr show eth0`
+`ping`	测试网络连通性	`ping -c 4 baidu.com`
+`netstat` / `ss`	查看网络连接状态	`ss -tlnp` 查看监听端口
+`curl`	命令行传输工具	`curl http://target.com/flag.php`
+`wget`	下载文件	`wget http://example.com/file.txt`
+`nc` (netcat)	网络瑞士军刀	`nc -lvnp 1234` 监听端口
+实践截图：
+![网络命令截图](此处粘贴截图：显示curl/ip addr等命令执行)
+----
+5. 系统管理命令
+命令	功能说明	示例
+`ps`	查看进程	`ps aux | grep python` 查找Python进程
+`top` / `htop`	实时系统监控	`htop` 交互式进程查看
+`kill`	终止进程	`kill -9 1234` 强制结束PID为1234的进程
+`df`	查看磁盘空间	`df -h` 人类可读格式
+`free`	查看内存使用	`free -h`
+实践截图：
+[](此处粘贴截图：显示htop/ps等命令界面
+----
+6. 压缩解压命令
+命令	功能	示例
+`tar`	打包压缩	`tar -czvf backup.tar.gz dir/` 压缩<br>`tar -xzvf backup.tar.gz` 解压
+`zip` / `unzip`	zip格式	`zip -r file.zip dir/`<br>`unzip file.zip`
+`gzip` / `gunzip`	gzip格式	`gzip file.txt`<br>`gunzip file.txt.gz`
+----
+五、扩展学习笔记（选做）
+HTTP协议基础
+请求方法：
+•  GET：获取资源，参数在URL中，幂等
+•  POST：提交数据，参数在请求体中，用于表单提交
+•  PUT：更新资源
+•  DELETE：删除资源
+常见请求头：
+头部字段	说明	CTF应用
+User-Agent	客户端标识	伪造浏览器或爬虫身份
+Referer	来源页面	绕过来源检查
+Cookie	用户凭证	会话劫持、伪造登录
+X-Forwarded-For	真实IP（代理）	IP伪造绕过限制
+Content-Type	数据类型	文件上传类型绕过
+常见状态码：
+•  200 OK - 请求成功
+•  301/302 - 重定向
+•  403 Forbidden - 权限不足
+•  404 Not Found - 资源不存在
+•  500 Internal Server Error - 服务器内部错误
+----
+PHP基础语法要点
+超全局变量（CTF高频考点）：
+•  $_GET - URL参数
+•  $_POST - POST数据
+•  $_COOKIE - Cookie数据
+•  $_SERVER - 服务器信息（含HTTP请求头）
+•  $_FILES - 上传文件信息
+常见考点函数：
+•  highlight_file() - 高亮显示源码（常用于题目展示）
+•  include() / require() - 文件包含（LFI/RFI漏洞）
+•  md5() / sha1() - 哈希比较绕过
+•  strcmp() - 字符串比较绕过
+•  is_numeric() - 数字判断绕过
+•  preg_match() - 正则绕过
+----
+六、学习心得与总结
+本周收获
+1.  工具链建立：完成了CTF Web方向基础工具的安装配置，形成了初步的工具使用能力
+2.  解题实践：通过3道基础题目理解了信息收集和HTTP请求构造的基本思路
+3.  环境准备：搭建了Linux实验环境，掌握了基础命令操作
+4.  学习方法：学会了利用AI辅助理解代码和概念，提高了自学效率
+遇到的困难与解决
+•  困难1：Burp Suite抓不到HTTPS包
+•  解决：安装Burp CA证书到浏览器受信任的根证书颁发机构
+•  困难2：dirsearch扫描无结果
+•  解决：检查Python环境，确认目标URL可达，尝试更换字典
+•  困难3：Linux命令参数记不住
+•  解决：整理成表格笔记，多用man 命令或命令 --help查看帮助
+后续计划
+1.  注册NSSCTF、BUUCTF、CTFSHOW等平台账号，完成手机认证
+2.  继续完成平台上的基础题目，积累更多实战经验
+3.  学习SQL注入基础，准备安装sqlmap工具
+4.  阅读《Web安全深度剖析》等书籍，补充理论知识
+对CTF学习的认识
+CTF与ACM等算法竞赛不同，它允许开卷和断网解题，更贴近真实安全场景。因此：
+•  笔记很重要：需要记录工具用法、解题思路，实战中快速查阅
+•  实践为王：只看理论不做题等于没学，必须动手实验
+•  社区交流：多看Writeup，学习他人思路，避免闭门造车
+•  持续积累：Web安全知识面很广，需要长期坚持学习
+----
+备注：本文档中所有 [此处粘贴截图] 位置需要替换为实际截图。建议截图包含完整的操作界面（含URL地址栏、命令行提示符等），以便验证操作真实性。
+
+---
+
+## 使用说明
+
+### 如何提交这份作业：
+
+1. **复制上方全部Markdown内容**到Typora/VS Code/语雀/飞书文档中
+
+2. **替换截图占位符**：
+   - 将 `![描述](此处粘贴截图...)` 替换为实际截图
+   - 截图建议：按 `Win+Shift+S` (Windows) 或 `Cmd+Shift+4` (Mac) 区域截图
+
+3. **填写实际flag值**：
+   - 题目2和题目3的flag需要根据你实际做题的结果填写
+   - 题目1的flag已根据搜索结果给出，但请以实际平台为准
+
+4. **导出格式**：
+   - 如果是Markdown文件：保存为 `学号_姓名_week1_report.md`
+   - 如果是语雀/飞书：导出为PDF或分享链接
+
+5. **提交到指定目录**：`/web/submissions`
+
+### 需要您补充的关键内容：
+- [ ] 各工具安装的实际截图（至少5张）
+- [ ] 三道题目的解题过程截图（每题3-5张）
+- [ ] Linux环境搭建截图（3-5张）
+- [ ] Linux命令实践截图（5-8张）
+- [ ] 题目2和题目3的实际flag值（需要您在平台上做题获取）
+
+### 快速获取截图的建议：
+- **gift_F12**：直接F12看源码，搜索flag
+- **robots.txt**：访问 `/robots.txt` 后按提示访问隐藏路径
+- **GET请求**：在URL后加 `?moe=flag` 即可
